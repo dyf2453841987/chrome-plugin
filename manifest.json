@@ -1,0 +1,19 @@
+{
+  "manifest_version": 3,
+  "name": "格式转换工具",
+  "description": "JSON格式化和YAML转Properties工具",
+  "version": "1.0",
+  "icons": {
+    "128": "icon128.png"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "128": "icon128.png"
+    }
+  },
+  "permissions": [
+    "clipboardWrite",
+    "clipboardRead"
+  ]
+} 

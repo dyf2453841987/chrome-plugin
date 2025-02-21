@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      width: 400px;
+      padding: 10px;
+    }
+    .tab {
+      display: inline-block;
+      padding: 8px 16px;
+      cursor: pointer;
+      background: #f0f0f0;
+      border: 1px solid #ddd;
+      margin-right: 5px;
+    }
+    .tab.active {
+      background: #2196F3;
+      color: white;
+      border-color: #2196F3;
+    }
+    textarea {
+      width: 100%;
+      height: 200px;
+      margin: 10px 0;
+      padding: 8px;
+    }
+    button {
+      background: #2196F3;
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1976D2;
+    }
+    .button-group {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
+  <script src="js-yaml.js"></script>
+</head>
+<body>
+  <div>
+    <div class="tab active" id="jsonTab">JSON格式化</div>
+    <div class="tab" id="yamlTab">YAML<->Properties</div>
+  </div>
+  
+  <div id="jsonSection">
+    <textarea id="jsonInput" placeholder="请输入JSON文本..."></textarea>
+    <div class="button-group">
+      <button id="formatJson">格式化</button>
+      <button id="formatJsonWithComments">格式化(保留注释)</button>
+    </div>
+  </div>
+  
+  <div id="yamlSection" style="display:none">
+    <textarea id="yamlInput" placeholder="请输入YAML或Properties文本..."></textarea>
+    <div class="button-group">
+      <button id="convertToProperties">转Properties</button>
+      <button id="convertToYaml">转YAML</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html> 
