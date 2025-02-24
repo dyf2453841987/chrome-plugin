@@ -8,16 +8,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const jsonToJavaSection = document.getElementById('jsonToJavaSection');
     const timestampSection = document.getElementById('timestampSection');
     const yamlSection = document.getElementById('yamlSection');
+    const hexTab = document.getElementById('hexTab');
+    const hexSection = document.getElementById('hexSection');
+    const base64Tab = document.getElementById('base64Tab');
+    const base64Section = document.getElementById('base64Section');
+    const crontabTab = document.getElementById('crontabTab');
+    const crontabSection = document.getElementById('crontabSection');
 
     jsonTab.addEventListener('click', () => {
         jsonTab.classList.add('active');
         jsonToJavaTab.classList.remove('active');
         timestampTab.classList.remove('active');
         yamlTab.classList.remove('active');
+        hexTab.classList.remove('active');
+        base64Tab.classList.remove('active');
+        crontabTab.classList.remove('active');
         jsonSection.style.display = 'block';
         jsonToJavaSection.style.display = 'none';
         timestampSection.style.display = 'none';
         yamlSection.style.display = 'none';
+        hexSection.style.display = 'none';
+        base64Section.style.display = 'none';
+        crontabSection.style.display = 'none';
     });
 
     jsonToJavaTab.addEventListener('click', () => {
@@ -25,10 +37,16 @@ document.addEventListener('DOMContentLoaded', function() {
         jsonTab.classList.remove('active');
         timestampTab.classList.remove('active');
         yamlTab.classList.remove('active');
+        hexTab.classList.remove('active');
+        base64Tab.classList.remove('active');
+        crontabTab.classList.remove('active');
         jsonToJavaSection.style.display = 'block';
         jsonSection.style.display = 'none';
         timestampSection.style.display = 'none';
         yamlSection.style.display = 'none';
+        hexSection.style.display = 'none';
+        base64Section.style.display = 'none';
+        crontabSection.style.display = 'none';
     });
 
     timestampTab.addEventListener('click', () => {
@@ -36,10 +54,16 @@ document.addEventListener('DOMContentLoaded', function() {
         jsonTab.classList.remove('active');
         jsonToJavaTab.classList.remove('active');
         yamlTab.classList.remove('active');
+        hexTab.classList.remove('active');
+        base64Tab.classList.remove('active');
+        crontabTab.classList.remove('active');
         timestampSection.style.display = 'block';
         jsonSection.style.display = 'none';
         jsonToJavaSection.style.display = 'none';
         yamlSection.style.display = 'none';
+        hexSection.style.display = 'none';
+        base64Section.style.display = 'none';
+        crontabSection.style.display = 'none';
 
         // 显示当前时间戳
         const isMilliseconds = document.querySelector('input[name="timestampType"]:checked').value === 'milliseconds';
@@ -64,10 +88,67 @@ document.addEventListener('DOMContentLoaded', function() {
         jsonTab.classList.remove('active');
         jsonToJavaTab.classList.remove('active');
         timestampTab.classList.remove('active');
+        hexTab.classList.remove('active');
+        base64Tab.classList.remove('active');
+        crontabTab.classList.remove('active');
         yamlSection.style.display = 'block';
         jsonSection.style.display = 'none';
         jsonToJavaSection.style.display = 'none';
         timestampSection.style.display = 'none';
+        hexSection.style.display = 'none';
+        base64Section.style.display = 'none';
+        crontabSection.style.display = 'none';
+    });
+
+    hexTab.addEventListener('click', () => {
+        hexTab.classList.add('active');
+        jsonTab.classList.remove('active');
+        jsonToJavaTab.classList.remove('active');
+        timestampTab.classList.remove('active');
+        yamlTab.classList.remove('active');
+        base64Tab.classList.remove('active');
+        crontabTab.classList.remove('active');
+        hexSection.style.display = 'block';
+        jsonSection.style.display = 'none';
+        jsonToJavaSection.style.display = 'none';
+        timestampSection.style.display = 'none';
+        yamlSection.style.display = 'none';
+        base64Section.style.display = 'none';
+        crontabSection.style.display = 'none';
+    });
+
+    base64Tab.addEventListener('click', () => {
+        base64Tab.classList.add('active');
+        jsonTab.classList.remove('active');
+        jsonToJavaTab.classList.remove('active');
+        timestampTab.classList.remove('active');
+        hexTab.classList.remove('active');
+        yamlTab.classList.remove('active');
+        crontabTab.classList.remove('active');
+        base64Section.style.display = 'block';
+        jsonSection.style.display = 'none';
+        jsonToJavaSection.style.display = 'none';
+        timestampSection.style.display = 'none';
+        hexSection.style.display = 'none';
+        yamlSection.style.display = 'none';
+        crontabSection.style.display = 'none';
+    });
+
+    crontabTab.addEventListener('click', () => {
+        crontabTab.classList.add('active');
+        jsonTab.classList.remove('active');
+        jsonToJavaTab.classList.remove('active');
+        timestampTab.classList.remove('active');
+        hexTab.classList.remove('active');
+        base64Tab.classList.remove('active');
+        yamlTab.classList.remove('active');
+        crontabSection.style.display = 'block';
+        jsonSection.style.display = 'none';
+        jsonToJavaSection.style.display = 'none';
+        timestampSection.style.display = 'none';
+        hexSection.style.display = 'none';
+        base64Section.style.display = 'none';
+        yamlSection.style.display = 'none';
     });
 
     // 普通JSON格式化功能
@@ -334,4 +415,362 @@ document.addEventListener('DOMContentLoaded', function() {
         const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
         document.getElementById('timestampOutput').value = formattedDate;
     });
+
+    // 进制转换功能
+    document.getElementById('convertNumber').addEventListener('click', function() {
+        const input = document.getElementById('hexInput').value.trim();
+        const selectedSystem = document.querySelector('input[name="numberSystem"]:checked').value;
+        
+        try {
+            let decimalNumber;
+            
+            // 根据选择的进制类型解析输入
+            switch(selectedSystem) {
+                case 'dec':
+                    decimalNumber = parseInt(input, 10);
+                    break;
+                case 'hex':
+                    decimalNumber = parseInt(input.replace(/^0x/i, ''), 16);
+                    break;
+                case 'oct':
+                    decimalNumber = parseInt(input.replace(/^0o/i, ''), 8);
+                    break;
+                case 'bin':
+                    decimalNumber = parseInt(input.replace(/^0b/i, ''), 2);
+                    break;
+            }
+
+            if (isNaN(decimalNumber)) {
+                throw new Error('无效的输入');
+            }
+
+            // 显示各种进制的结果
+            document.getElementById('decResult').textContent = decimalNumber;
+            document.getElementById('hexResult').textContent = '0x' + decimalNumber.toString(16).toUpperCase();
+            document.getElementById('octResult').textContent = '0o' + decimalNumber.toString(8);
+            document.getElementById('binResult').textContent = '0b' + decimalNumber.toString(2);
+        } catch (error) {
+            console.error("进制转换错误:", error);
+            alert("请输入有效的数值！");
+        }
+    });
+
+    // 添加输入框的实时转换功能
+    document.getElementById('hexInput').addEventListener('input', function() {
+        const convertButton = document.getElementById('convertNumber');
+        if (this.value.trim()) {
+            convertButton.click();
+        } else {
+            document.getElementById('decResult').textContent = '-';
+            document.getElementById('hexResult').textContent = '-';
+            document.getElementById('octResult').textContent = '-';
+            document.getElementById('binResult').textContent = '-';
+        }
+    });
+
+    // 子标签切换逻辑
+    document.querySelectorAll('.sub-tab').forEach(tab => {
+        tab.addEventListener('click', function() {
+            // 移除所有子标签的 active 类
+            document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+            // 隐藏所有子部分
+            document.querySelectorAll('.sub-section').forEach(s => s.style.display = 'none');
+            
+            // 激活当前子标签
+            this.classList.add('active');
+            // 显示对应的子部分
+            document.getElementById(this.dataset.target).style.display = 'block';
+        });
+    });
+
+    // 图片转Base64功能优化
+    document.getElementById('imageInput').addEventListener('change', async function(e) {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        // 修改文件大小限制为15MB
+        const MAX_SIZE = 15 * 1024 * 1024; // 15MB
+        if (file.size > MAX_SIZE) {
+            alert('图片大小不能超过15MB！');
+            return;
+        }
+
+        // 显示加载提示
+        const loadingText = document.createElement('div');
+        loadingText.textContent = '正在处理图片...';
+        loadingText.style.textAlign = 'center';
+        const previewArea = document.querySelector('.preview-area');
+        previewArea.appendChild(loadingText);
+
+        try {
+            // 压缩图片
+            const compressedImage = await compressImage(file);
+            
+            // 转换为Base64
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const base64 = e.target.result;
+                document.getElementById('base64Output').value = base64;
+                
+                // 显示图片预览
+                const preview = document.getElementById('imagePreview');
+                preview.src = base64;
+                preview.style.display = 'block';
+                
+                // 移除加载提示
+                loadingText.remove();
+            };
+            reader.readAsDataURL(compressedImage);
+        } catch (error) {
+            console.error('图片处理错误:', error);
+            alert('图片处理失败！');
+            loadingText.remove();
+        }
+    });
+
+    // 图片压缩函数
+    function compressImage(file) {
+        return new Promise((resolve, reject) => {
+            const img = new Image();
+            img.src = URL.createObjectURL(file);
+            
+            img.onload = () => {
+                // 计算压缩后的尺寸
+                let width = img.width;
+                let height = img.height;
+                const MAX_WIDTH = 1024;
+                const MAX_HEIGHT = 1024;
+
+                if (width > height) {
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                } else {
+                    if (height > MAX_HEIGHT) {
+                        width *= MAX_HEIGHT / height;
+                        height = MAX_HEIGHT;
+                    }
+                }
+
+                // 创建canvas进行压缩
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // 转换为Blob
+                canvas.toBlob((blob) => {
+                    resolve(blob);
+                }, file.type, 0.7); // 压缩质量为0.7
+
+                // 释放内存
+                URL.revokeObjectURL(img.src);
+            };
+
+            img.onerror = reject;
+        });
+    }
+
+    // 复制Base64按钮功能
+    document.getElementById('copyBase64').addEventListener('click', function() {
+        const base64Output = document.getElementById('base64Output');
+        base64Output.select();
+        document.execCommand('copy');
+        alert('Base64已复制到剪贴板！');
+    });
+
+    // Base64转图片功能优化
+    document.getElementById('convertToImage').addEventListener('click', function() {
+        const base64Input = document.getElementById('base64Input').value.trim();
+        const preview = document.getElementById('base64ImagePreview');
+        
+        try {
+            // 显示加载提示
+            const loadingText = document.createElement('div');
+            loadingText.textContent = '正在转换...';
+            loadingText.style.textAlign = 'center';
+            preview.parentElement.appendChild(loadingText);
+
+            // 如果输入的base64不包含data:image前缀，添加它
+            const base64Data = base64Input.startsWith('data:image') ? 
+                base64Input : 
+                'data:image/png;base64,' + base64Input;
+
+            // 预加载图片
+            const img = new Image();
+            img.onload = function() {
+                preview.src = base64Data;
+                preview.style.display = 'block';
+                loadingText.remove();
+            };
+            img.onerror = function() {
+                alert('无效的Base64编码！');
+                loadingText.remove();
+            };
+            img.src = base64Data;
+        } catch (error) {
+            console.error('Base64转换错误:', error);
+            alert('请输入有效的Base64编码！');
+        }
+    });
+
+    // Crontab 计算功能
+    document.getElementById('calculateCron').addEventListener('click', function() {
+        const cronExpression = document.getElementById('cronExpression').value.trim();
+        calculateNextExecutions(cronExpression);
+    });
+
+    // 示例点击事件
+    document.querySelectorAll('.example-item').forEach(item => {
+        item.addEventListener('click', function() {
+            const cronExp = this.getAttribute('data-cron');
+            document.getElementById('cronExpression').value = cronExp;
+            calculateNextExecutions(cronExp);
+        });
+    });
+
+    // 计算未来执行时间
+    function calculateNextExecutions(cronExp) {
+        try {
+            const execTimes = [];
+            let currentDate = new Date();
+            
+            // 解析 cron 表达式
+            const [minute, hour, day, month, weekday] = cronExp.split(' ');
+            
+            // 验证表达式格式
+            if (!isValidCronExpression(minute, hour, day, month, weekday)) {
+                throw new Error('无效的 Cron 表达式');
+            }
+
+            // 计算未来10次执行时间
+            let nextDate = new Date(currentDate);
+            for(let i = 0; i < 10; i++) {
+                nextDate = findNext(nextDate, minute, hour, day, month, weekday);
+                execTimes.push(formatDate(nextDate));
+                nextDate = new Date(nextDate.getTime() + 60000); // 加一分钟以找下一次
+            }
+            
+            // 显示结果
+            document.getElementById('executionTimes').innerHTML = execTimes.join('<br>');
+        } catch (error) {
+            console.error('Cron 表达式解析错误:', error);
+            alert('请输入有效的 Cron 表达式！');
+        }
+    }
+
+    // 验证 cron 表达式
+    function isValidCronExpression(minute, hour, day, month, weekday) {
+        const minutePattern = /^(\*|[0-5]?[0-9])(\/[0-9]+)?$/;
+        const hourPattern = /^(\*|[01]?[0-9]|2[0-3])(\/[0-9]+)?$/;
+        const dayPattern = /^(\*|[1-2]?[0-9]|3[01])(\/[0-9]+)?$/;
+        const monthPattern = /^(\*|[1-9]|1[0-2])(\/[0-9]+)?$/;
+        const weekdayPattern = /^(\*|[0-6])(\/[0-9]+)?$/;
+
+        return minutePattern.test(minute) &&
+               hourPattern.test(hour) &&
+               dayPattern.test(day) &&
+               monthPattern.test(month) &&
+               weekdayPattern.test(weekday);
+    }
+
+    // 解析 cron 值
+    function parseCronValue(value, min, max) {
+        if (value === '*') {
+            return Array.from({length: max - min + 1}, (_, i) => i + min);
+        }
+        if (value.includes('/')) {
+            const [, step] = value.split('/');
+            const stepNum = parseInt(step);
+            return Array.from({length: Math.floor((max - min) / stepNum) + 1}, 
+                             (_, i) => min + (i * stepNum)).filter(v => v <= max);
+        }
+        return [parseInt(value)];
+    }
+
+    // 找到下一个执行时间
+    function findNext(currentDate, minute, hour, day, month, weekday) {
+        let nextDate = new Date(currentDate);
+        nextDate.setSeconds(0);
+        nextDate.setMilliseconds(0);
+
+        const minutes = parseCronValue(minute, 0, 59);
+        const hours = parseCronValue(hour, 0, 23);
+        const days = day === '*' ? [] : parseCronValue(day, 1, 31);
+        const months = month === '*' ? [] : parseCronValue(month, 1, 12);
+        const weekdays = weekday === '*' ? [] : parseCronValue(weekday, 0, 6);
+
+        while (true) {
+            // 检查月份
+            if (months.length > 0 && !months.includes(nextDate.getMonth() + 1)) {
+                nextDate.setMonth(nextDate.getMonth() + 1);
+                nextDate.setDate(1);
+                nextDate.setHours(0);
+                nextDate.setMinutes(0);
+                continue;
+            }
+
+            // 检查日期
+            if (days.length > 0) {
+                if (!days.includes(nextDate.getDate())) {
+                    nextDate.setDate(nextDate.getDate() + 1);
+                    nextDate.setHours(0);
+                    nextDate.setMinutes(0);
+                    continue;
+                }
+            }
+
+            // 检查星期
+            if (weekdays.length > 0) {
+                if (!weekdays.includes(nextDate.getDay())) {
+                    nextDate.setDate(nextDate.getDate() + 1);
+                    nextDate.setHours(0);
+                    nextDate.setMinutes(0);
+                    continue;
+                }
+            }
+
+            // 检查小时
+            if (!hours.includes(nextDate.getHours())) {
+                if (nextDate.getHours() > Math.max(...hours)) {
+                    nextDate.setDate(nextDate.getDate() + 1);
+                    nextDate.setHours(Math.min(...hours));
+                } else {
+                    nextDate.setHours(hours.find(h => h > nextDate.getHours()) || Math.min(...hours));
+                }
+                nextDate.setMinutes(Math.min(...minutes));
+                continue;
+            }
+
+            // 检查分钟
+            if (!minutes.includes(nextDate.getMinutes())) {
+                if (nextDate.getMinutes() > Math.max(...minutes)) {
+                    nextDate.setHours(nextDate.getHours() + 1);
+                    nextDate.setMinutes(Math.min(...minutes));
+                    continue;
+                }
+                nextDate.setMinutes(minutes.find(m => m > nextDate.getMinutes()) || Math.min(...minutes));
+                continue;
+            }
+
+            break;
+        }
+
+        return nextDate;
+    }
+
+    // 格式化日期
+    function formatDate(date) {
+        return date.toLocaleString('zh-CN', {
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hour12: false
+        });
+    }
 }); 
