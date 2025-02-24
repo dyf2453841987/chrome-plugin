@@ -40,6 +40,23 @@ document.addEventListener('DOMContentLoaded', function() {
         jsonSection.style.display = 'none';
         jsonToJavaSection.style.display = 'none';
         yamlSection.style.display = 'none';
+
+        // 显示当前时间戳
+        const isMilliseconds = document.querySelector('input[name="timestampType"]:checked').value === 'milliseconds';
+        const now = isMilliseconds ? Date.now() : Math.floor(Date.now() / 1000);
+        document.getElementById('timestampInput').value = now;
+        
+        // 同时显示当前时间的格式化字符串
+        const date = new Date(isMilliseconds ? now : now * 1000);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        
+        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        document.getElementById('timestampOutput').value = formattedDate;
     });
 
     yamlTab.addEventListener('click', () => {
@@ -271,11 +288,13 @@ document.addEventListener('DOMContentLoaded', function() {
     // 时间戳转换功能
     document.getElementById('convertTimestamp').addEventListener('click', function() {
         const timestampInput = document.getElementById('timestampInput').value.trim();
+        const isMilliseconds = document.querySelector('input[name="timestampType"]:checked').value === 'milliseconds';
+        
         try {
             let timestamp = parseInt(timestampInput);
             
-            // 如果时间戳是毫秒级的（13位），转换为秒级（10位）
-            if (timestamp.toString().length === 13) {
+            // 根据选择的类型进行转换
+            if (isMilliseconds) {
                 timestamp = Math.floor(timestamp / 1000);
             }
             
@@ -295,5 +314,24 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error("时间戳转换错误:", error);
             alert("请输入有效的时间戳！");
         }
+    });
+
+    // 获取当前时间戳按钮的事件处理
+    document.getElementById('getCurrentTimestamp').addEventListener('click', function() {
+        const isMilliseconds = document.querySelector('input[name="timestampType"]:checked').value === 'milliseconds';
+        const now = isMilliseconds ? Date.now() : Math.floor(Date.now() / 1000);
+        document.getElementById('timestampInput').value = now;
+        
+        // 同时更新格式化的时间显示
+        const date = new Date(isMilliseconds ? now : now * 1000);
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        
+        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        document.getElementById('timestampOutput').value = formattedDate;
     });
 }); 
