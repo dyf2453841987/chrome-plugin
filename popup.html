@@ -201,6 +201,129 @@
       border-radius: 4px;
       font-family: monospace;
     }
+    .field-row, .join-row, .where-row, .order-by-row, .set-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .add-field, .add-join, .add-where, .add-order-by, .add-set {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    
+    .remove-row {
+        background: #f44336;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    
+    .error-message {
+        color: #f44336;
+        margin-top: 10px;
+        padding: 10px;
+        background: #ffebee;
+        border-radius: 4px;
+    }
+    
+    select {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .field-function {
+        width: 100px;
+    }
+    
+    .where-operator {
+        width: 120px;
+    }
+    .table-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .table-name,
+    .table-alias {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .add-table {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    .sql-type-buttons {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    
+    .sql-type-btn {
+        padding: 8px 16px;
+        border: 1px solid #ddd;
+        background: #f5f5f5;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    
+    .sql-type-btn.active {
+        background: #2196F3;
+        color: white;
+        border-color: #2196F3;
+    }
+    
+    .primary-btn {
+        background: #2196F3;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+    
+    .button-group {
+        display: flex;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    .table-row, .join-row, .where-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 8px;
+        align-items: center;
+    }
+    
+    input, select {
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+    
+    .join-condition {
+        flex: 1;
+    }
+    
+    #sqlOutput {
+        margin-top: 20px;
+        min-height: 100px;
+    }
   </style>
   <script src="js-yaml.js"></script>
 </head>
@@ -356,51 +479,76 @@
 
   <div id="sqlSection" style="display:none">
     <div class="sql-form">
-      <div class="form-group">
-        <label>数据库名:</label>
-        <input type="text" id="dbName" placeholder="请输入数据库名">
-      </div>
-      
-      <div class="form-group">
-        <label>SQL类型:</label>
-        <select id="sqlType">
-          <option value="select">SELECT</option>
-          <option value="update">UPDATE</option>
-          <option value="delete">DELETE</option>
-        </select>
-      </div>
+        <div class="form-group">
+            <label>数据库名:</label>
+            <input type="text" id="dbName" placeholder="请输入数据库名">
+        </div>
+        
+        <div class="form-group">
+            <label>SQL类型:</label>
+            <div class="sql-type-buttons">
+                <button class="sql-type-btn active" data-type="select">SELECT</button>
+                <button class="sql-type-btn" data-type="update">UPDATE</button>
+                <button class="sql-type-btn" data-type="delete">DELETE</button>
+            </div>
+        </div>
 
-      <div class="form-group">
-        <label>表名(多个用逗号分隔):</label>
-        <input type="text" id="tableNames" placeholder="例如: user,order">
-      </div>
+        <div class="form-group">
+            <label>表和关联:</label>
+            <div class="table-inputs">
+                <div class="table-row">
+                    <input type="text" class="table-name" placeholder="表名">
+                    <input type="text" class="table-alias" placeholder="别名" style="width: 80px;">
+                    <button class="add-table">+</button>
+                </div>
+            </div>
+            <div class="join-inputs" style="margin-top: 10px;">
+                <div class="join-row">
+                    <select class="join-type" style="width: 120px;">
+                        <option value="JOIN">INNER JOIN</option>
+                        <option value="LEFT JOIN">LEFT JOIN</option>
+                        <option value="RIGHT JOIN">RIGHT JOIN</option>
+                    </select>
+                    <input type="text" class="join-condition" placeholder="关联条件: A.id = B.id">
+                </div>
+            </div>
+        </div>
 
-      <div class="form-group">
-        <label>关联条件:</label>
-        <textarea id="joinConditions" placeholder="例如:&#10;user.id = order.user_id&#10;order.status = product.status"></textarea>
-      </div>
+        <div class="form-group">
+            <label>查询条件:</label>
+            <div class="where-inputs">
+                <div class="where-row">
+                    <input type="text" class="where-field" placeholder="字段名">
+                    <select class="where-operator" style="width: 100px;">
+                        <option value="=">=</option>
+                        <option value="!=">!=</option>
+                        <option value=">">></option>
+                        <option value="<"><</option>
+                        <option value=">=">>=</option>
+                        <option value="<="><=</option>
+                        <option value="LIKE">LIKE</option>
+                        <option value="IN">IN</option>
+                        <option value="IS NULL">IS NULL</option>
+                    </select>
+                    <input type="text" class="where-value" placeholder="值">
+                    <select class="where-connector" style="width: 70px;">
+                        <option value="AND">AND</option>
+                        <option value="OR">OR</option>
+                    </select>
+                    <button class="add-where">+</button>
+                </div>
+            </div>
+        </div>
 
-      <div class="form-group">
-        <label>查询条件:</label>
-        <textarea id="whereConditions" placeholder="例如:&#10;user.age > 18&#10;order.status = 'PAID'"></textarea>
-      </div>
-
-      <div class="form-group select-columns" style="display:none">
-        <label>查询字段(多个用逗号分隔,*表示全部):</label>
-        <input type="text" id="selectColumns" placeholder="例如: user.name,order.price,*">
-      </div>
-
-      <div class="form-group update-values" style="display:none">
-        <label>更新值:</label>
-        <textarea id="updateValues" placeholder="例如:&#10;status = 'COMPLETED'&#10;update_time = NOW()"></textarea>
-      </div>
-
-      <button id="generateSql">生成SQL</button>
+        <div class="button-group">
+            <button id="generateSql" class="primary-btn">生成SQL</button>
+            <button id="copySql">复制SQL</button>
+            <button id="clearForm">清空表单</button>
+        </div>
     </div>
 
     <div class="sql-result">
-      <textarea id="sqlOutput" readonly placeholder="生成的SQL将显示在这里..."></textarea>
-      <button id="copySql">复制SQL</button>
+        <textarea id="sqlOutput" readonly placeholder="生成的SQL将显示在这里..."></textarea>
     </div>
   </div>
 
