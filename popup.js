@@ -14,6 +14,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const base64Section = document.getElementById('base64Section');
     const crontabTab = document.getElementById('crontabTab');
     const crontabSection = document.getElementById('crontabSection');
+    const sqlTab = document.getElementById('sqlTab');
+    const sqlSection = document.getElementById('sqlSection');
 
     jsonTab.addEventListener('click', () => {
         jsonTab.classList.add('active');
@@ -23,6 +25,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexTab.classList.remove('active');
         base64Tab.classList.remove('active');
         crontabTab.classList.remove('active');
+        sqlTab.classList.remove('active');
         jsonSection.style.display = 'block';
         jsonToJavaSection.style.display = 'none';
         timestampSection.style.display = 'none';
@@ -30,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexSection.style.display = 'none';
         base64Section.style.display = 'none';
         crontabSection.style.display = 'none';
+        sqlSection.style.display = 'none';
     });
 
     jsonToJavaTab.addEventListener('click', () => {
@@ -40,6 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexTab.classList.remove('active');
         base64Tab.classList.remove('active');
         crontabTab.classList.remove('active');
+        sqlTab.classList.remove('active');
         jsonToJavaSection.style.display = 'block';
         jsonSection.style.display = 'none';
         timestampSection.style.display = 'none';
@@ -47,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexSection.style.display = 'none';
         base64Section.style.display = 'none';
         crontabSection.style.display = 'none';
+        sqlSection.style.display = 'none';
     });
 
     timestampTab.addEventListener('click', () => {
@@ -57,6 +63,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexTab.classList.remove('active');
         base64Tab.classList.remove('active');
         crontabTab.classList.remove('active');
+        sqlTab.classList.remove('active');
         timestampSection.style.display = 'block';
         jsonSection.style.display = 'none';
         jsonToJavaSection.style.display = 'none';
@@ -64,6 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexSection.style.display = 'none';
         base64Section.style.display = 'none';
         crontabSection.style.display = 'none';
+        sqlSection.style.display = 'none';
 
         // 显示当前时间戳
         const isMilliseconds = document.querySelector('input[name="timestampType"]:checked').value === 'milliseconds';
@@ -91,6 +99,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexTab.classList.remove('active');
         base64Tab.classList.remove('active');
         crontabTab.classList.remove('active');
+        sqlTab.classList.remove('active');
         yamlSection.style.display = 'block';
         jsonSection.style.display = 'none';
         jsonToJavaSection.style.display = 'none';
@@ -98,6 +107,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexSection.style.display = 'none';
         base64Section.style.display = 'none';
         crontabSection.style.display = 'none';
+        sqlSection.style.display = 'none';
     });
 
     hexTab.addEventListener('click', () => {
@@ -108,6 +118,7 @@ document.addEventListener('DOMContentLoaded', function() {
         yamlTab.classList.remove('active');
         base64Tab.classList.remove('active');
         crontabTab.classList.remove('active');
+        sqlTab.classList.remove('active');
         hexSection.style.display = 'block';
         jsonSection.style.display = 'none';
         jsonToJavaSection.style.display = 'none';
@@ -115,6 +126,7 @@ document.addEventListener('DOMContentLoaded', function() {
         yamlSection.style.display = 'none';
         base64Section.style.display = 'none';
         crontabSection.style.display = 'none';
+        sqlSection.style.display = 'none';
     });
 
     base64Tab.addEventListener('click', () => {
@@ -125,6 +137,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexTab.classList.remove('active');
         yamlTab.classList.remove('active');
         crontabTab.classList.remove('active');
+        sqlTab.classList.remove('active');
         base64Section.style.display = 'block';
         jsonSection.style.display = 'none';
         jsonToJavaSection.style.display = 'none';
@@ -132,6 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexSection.style.display = 'none';
         yamlSection.style.display = 'none';
         crontabSection.style.display = 'none';
+        sqlSection.style.display = 'none';
     });
 
     crontabTab.addEventListener('click', () => {
@@ -142,6 +156,7 @@ document.addEventListener('DOMContentLoaded', function() {
         hexTab.classList.remove('active');
         base64Tab.classList.remove('active');
         yamlTab.classList.remove('active');
+        sqlTab.classList.remove('active');
         crontabSection.style.display = 'block';
         jsonSection.style.display = 'none';
         jsonToJavaSection.style.display = 'none';
@@ -149,6 +164,18 @@ document.addEventListener('DOMContentLoaded', function() {
         hexSection.style.display = 'none';
         base64Section.style.display = 'none';
         yamlSection.style.display = 'none';
+        sqlSection.style.display = 'none';
+    });
+
+    sqlTab.addEventListener('click', () => {
+        // 移除其他tab的active类
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        // 隐藏其他section
+        document.querySelectorAll('div[id$="Section"]').forEach(s => s.style.display = 'none');
+        
+        // 激活SQL tab和section
+        sqlTab.classList.add('active');
+        sqlSection.style.display = 'block';
     });
 
     // 普通JSON格式化功能
@@ -772,5 +799,149 @@ document.addEventListener('DOMContentLoaded', function() {
             second: '2-digit',
             hour12: false
         });
+    }
+
+    // SQL类型切换时显示/隐藏相关字段
+    document.getElementById('sqlType').addEventListener('change', function() {
+        const selectColumns = document.querySelector('.select-columns');
+        const updateValues = document.querySelector('.update-values');
+        
+        switch(this.value) {
+            case 'select':
+                selectColumns.style.display = 'block';
+                updateValues.style.display = 'none';
+                break;
+            case 'update':
+                selectColumns.style.display = 'none';
+                updateValues.style.display = 'block';
+                break;
+            case 'delete':
+                selectColumns.style.display = 'none';
+                updateValues.style.display = 'none';
+                break;
+        }
+    });
+
+    // 生成SQL按钮点击事件
+    document.getElementById('generateSql').addEventListener('click', function() {
+        const dbName = document.getElementById('dbName').value.trim();
+        const sqlType = document.getElementById('sqlType').value;
+        const tableNames = document.getElementById('tableNames').value.trim();
+        const joinConditions = document.getElementById('joinConditions').value.trim();
+        const whereConditions = document.getElementById('whereConditions').value.trim();
+        const selectColumns = document.getElementById('selectColumns').value.trim();
+        const updateValues = document.getElementById('updateValues').value.trim();
+        
+        if (!dbName || !tableNames) {
+            alert('请至少输入数据库名和表名！');
+            return;
+        }
+        
+        let sql = '';
+        const tables = tableNames.split(',').map(t => t.trim());
+        
+        try {
+            switch(sqlType) {
+                case 'select':
+                    sql = generateSelectSql(dbName, tables, selectColumns, joinConditions, whereConditions);
+                    break;
+                case 'update':
+                    sql = generateUpdateSql(dbName, tables, updateValues, joinConditions, whereConditions);
+                    break;
+                case 'delete':
+                    sql = generateDeleteSql(dbName, tables, joinConditions, whereConditions);
+                    break;
+            }
+            
+            document.getElementById('sqlOutput').value = sql;
+        } catch (error) {
+            alert('生成SQL时出错: ' + error.message);
+        }
+    });
+
+    // 复制SQL按钮点击事件
+    document.getElementById('copySql').addEventListener('click', function() {
+        const sqlOutput = document.getElementById('sqlOutput');
+        sqlOutput.select();
+        document.execCommand('copy');
+        alert('SQL已复制到剪贴板！');
+    });
+
+    // 生成SELECT SQL
+    function generateSelectSql(dbName, tables, columns, joinConditions, whereConditions) {
+        const selectCols = columns && columns !== '*' ? columns : '*';
+        let sql = `SELECT ${selectCols}\nFROM ${dbName}.${tables[0]}`;
+        
+        // 添加JOIN条件
+        if (tables.length > 1 && joinConditions) {
+            const joins = joinConditions.split('\n').filter(j => j.trim());
+            joins.forEach(join => {
+                sql += `\nJOIN ${dbName}.${tables[joins.indexOf(join) + 1]} ON ${join.trim()}`;
+            });
+        }
+        
+        // 添加WHERE条件
+        if (whereConditions) {
+            const conditions = whereConditions.split('\n').filter(c => c.trim());
+            if (conditions.length > 0) {
+                sql += `\nWHERE ${conditions.join('\n  AND ')}`;
+            }
+        }
+        
+        return sql + ';';
+    }
+
+    // 生成UPDATE SQL
+    function generateUpdateSql(dbName, tables, updateValues, joinConditions, whereConditions) {
+        if (!updateValues) {
+            throw new Error('更新语句需要指定更新值！');
+        }
+        
+        let sql = `UPDATE ${dbName}.${tables[0]}`;
+        
+        // 添加JOIN条件
+        if (tables.length > 1 && joinConditions) {
+            const joins = joinConditions.split('\n').filter(j => j.trim());
+            joins.forEach(join => {
+                sql += `\nJOIN ${dbName}.${tables[joins.indexOf(join) + 1]} ON ${join.trim()}`;
+            });
+        }
+        
+        // 添加SET子句
+        const setValues = updateValues.split('\n').filter(v => v.trim());
+        sql += `\nSET ${setValues.join(',\n    ')}`;
+        
+        // 添加WHERE条件
+        if (whereConditions) {
+            const conditions = whereConditions.split('\n').filter(c => c.trim());
+            if (conditions.length > 0) {
+                sql += `\nWHERE ${conditions.join('\n  AND ')}`;
+            }
+        }
+        
+        return sql + ';';
+    }
+
+    // 生成DELETE SQL
+    function generateDeleteSql(dbName, tables, joinConditions, whereConditions) {
+        let sql = `DELETE ${tables[0]}\nFROM ${dbName}.${tables[0]}`;
+        
+        // 添加JOIN条件
+        if (tables.length > 1 && joinConditions) {
+            const joins = joinConditions.split('\n').filter(j => j.trim());
+            joins.forEach(join => {
+                sql += `\nJOIN ${dbName}.${tables[joins.indexOf(join) + 1]} ON ${join.trim()}`;
+            });
+        }
+        
+        // 添加WHERE条件
+        if (whereConditions) {
+            const conditions = whereConditions.split('\n').filter(c => c.trim());
+            if (conditions.length > 0) {
+                sql += `\nWHERE ${conditions.join('\n  AND ')}`;
+            }
+        }
+        
+        return sql + ';';
     }
 }); 
