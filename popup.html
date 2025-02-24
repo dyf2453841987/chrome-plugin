@@ -321,8 +321,43 @@
     }
     
     #sqlOutput {
-        margin-top: 20px;
-        min-height: 100px;
+        width: 100%;
+        min-height: 150px;
+        font-family: monospace;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        background-color: #f8f9fa;
+        resize: vertical;
+        line-height: 1.5;
+    }
+
+    #sqlOutput:focus {
+        outline: none;
+        border-color: #2196F3;
+        box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.1);
+    }
+
+    .set-row {
+        display: flex;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+
+    .set-field, .set-value {
+        flex: 1;
+        padding: 8px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .add-set {
+        background: #4CAF50;
+        color: white;
+        border: none;
+        padding: 4px 8px;
+        cursor: pointer;
+        border-radius: 4px;
     }
   </style>
   <script src="js-yaml.js"></script>
@@ -514,6 +549,17 @@
             </div>
         </div>
 
+        <div class="form-group set-clause" style="display: none;">
+            <label>修改内容:</label>
+            <div class="set-inputs">
+                <div class="set-row">
+                    <input type="text" class="set-field" placeholder="字段名">
+                    <input type="text" class="set-value" placeholder="新值">
+                    <button class="add-set">+</button>
+                </div>
+            </div>
+        </div>
+
         <div class="form-group">
             <label>查询条件:</label>
             <div class="where-inputs">
@@ -542,13 +588,14 @@
 
         <div class="button-group">
             <button id="generateSql" class="primary-btn">生成SQL</button>
+            <button id="formatSql">格式化SQL</button>
             <button id="copySql">复制SQL</button>
             <button id="clearForm">清空表单</button>
         </div>
     </div>
 
     <div class="sql-result">
-        <textarea id="sqlOutput" readonly placeholder="生成的SQL将显示在这里..."></textarea>
+        <textarea id="sqlOutput" placeholder="输入或生成的SQL将显示在这里..."></textarea>
     </div>
   </div>
 
