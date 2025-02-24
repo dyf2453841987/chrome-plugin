@@ -40,12 +40,21 @@
       display: flex;
       gap: 10px;
     }
+    textarea#timestampInput {
+      height: 50px;
+    }
+    textarea#timestampOutput {
+      height: 50px;
+      background-color: #f5f5f5;
+    }
   </style>
   <script src="js-yaml.js"></script>
 </head>
 <body>
   <div>
     <div class="tab active" id="jsonTab">JSON格式化</div>
+    <div class="tab" id="jsonToJavaTab">JSON转Java</div>
+    <div class="tab" id="timestampTab">时间戳转换</div>
     <div class="tab" id="yamlTab">YAML<->Properties</div>
   </div>
   
@@ -56,7 +65,22 @@
       <button id="formatJsonWithComments">格式化(保留注释)</button>
     </div>
   </div>
-  
+
+  <div id="jsonToJavaSection" style="display:none">
+    <textarea id="jsonToJavaInput" placeholder="请输入JSON文本..."></textarea>
+    <div class="button-group">
+      <button id="convertToJavaClass">转换为Java实体类</button>
+    </div>
+  </div>
+
+  <div id="timestampSection" style="display:none">
+    <textarea id="timestampInput" placeholder="请输入Unix时间戳（10位或13位）..."></textarea>
+    <div class="button-group">
+      <button id="convertTimestamp">转换为日期时间</button>
+    </div>
+    <textarea id="timestampOutput" placeholder="转换结果..." readonly></textarea>
+  </div>
+
   <div id="yamlSection" style="display:none">
     <textarea id="yamlInput" placeholder="请输入YAML或Properties文本..."></textarea>
     <div class="button-group">
@@ -66,5 +90,109 @@
   </div>
 
   <script src="popup.js"></script>
+  <script>
+    // Tab 切换逻辑
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        console.log("Tab 被点击:", this.id); // 调试信息
+        // 移除所有 tab 的 active 类
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        // 隐藏所有 section
+        document.getElementById('jsonToJavaSection').style.display = 'none';
+        document.getElementById('jsonSection').style.display = 'none';
+        document.getElementById('timestampSection').style.display = 'none';
+        document.getElementById('yamlSection').style.display = 'none';
+        
+        // 激活当前 tab
+        this.classList.add('active');
+        
+        // 显示对应的 section
+        if (this.id === 'jsonToJavaTab') {
+          document.getElementById('jsonToJavaSection').style.display = 'block';
+        } else if (this.id === 'jsonTab') {
+          document.getElementById('jsonSection').style.display = 'block';
+        } else if (this.id === 'timestampTab') {
+          document.getElementById('timestampSection').style.display = 'block';
+        } else if (this.id === 'yamlTab') {
+          document.getElementById('yamlSection').style.display = 'block';
+        }
+      });
+    });
+
+    // JSON 转 Java 实体类功能
+    document.getElementById('convertToJavaClass').addEventListener('click', function() {
+      const jsonInput = document.getElementById('jsonToJavaInput').value;
+      try {
+        const jsonObject = JSON.parse(jsonInput);
+        const javaClass = convertJsonToJavaClass(jsonObject, 'MyClass');
+        document.getElementById('jsonToJavaInput').value = javaClass;
+      } catch (error) {
+        console.error("转换为 Java 实体类时出错:", error);
+        alert("转换失败，请确保输入的 JSON 格式正确。");
+      }
+    });
+
+    function convertJsonToJavaClass(jsonObject, className) {
+      let javaClass = `public class ${className} {\n`;
+      for (const [key, value] of Object.entries(jsonObject)) {
+        const type = getJavaType(value);
+        javaClass += `    private ${type} ${key};\n`;
+      }
+      javaClass += `\n    // Getters and Setters\n`;
+      for (const key of Object.keys(jsonObject)) {
+        javaClass += `    public ${getJavaType(jsonObject[key])} get${capitalizeFirstLetter(key)}() {\n`;
+        javaClass += `        return ${key};\n    }\n\n`;
+        javaClass += `    public void set${capitalizeFirstLetter(key)}(${getJavaType(jsonObject[key])} ${key}) {\n`;
+        javaClass += `        this.${key} = ${key};\n    }\n\n`;
+      }
+      javaClass += `}`;
+      return javaClass;
+    }
+
+    function getJavaType(value) {
+      if (Array.isArray(value)) {
+        return 'List<Object>';
+      } else if (typeof value === 'number') {
+        return Number.isInteger(value) ? 'int' : 'double';
+      } else if (typeof value === 'boolean') {
+        return 'boolean';
+      } else {
+        return 'String';
+      }
+    }
+
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    // 时间戳转换功能
+    document.getElementById('convertTimestamp').addEventListener('click', function() {
+      const timestampInput = document.getElementById('timestampInput').value.trim();
+      try {
+        let timestamp = parseInt(timestampInput);
+        
+        // 如果时间戳是毫秒级的（13位），转换为秒级（10位）
+        if (timestamp.toString().length === 13) {
+          timestamp = Math.floor(timestamp / 1000);
+        }
+        
+        const date = new Date(timestamp * 1000);
+        
+        // 格式化日期时间
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        const hours = String(date.getHours()).padStart(2, '0');
+        const minutes = String(date.getMinutes()).padStart(2, '0');
+        const seconds = String(date.getSeconds()).padStart(2, '0');
+        
+        const formattedDate = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+        document.getElementById('timestampOutput').value = formattedDate;
+      } catch (error) {
+        console.error("时间戳转换错误:", error);
+        alert("请输入有效的时间戳！");
+      }
+    });
+  </script>
 </body>
 </html> 
