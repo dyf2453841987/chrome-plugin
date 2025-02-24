@@ -14,6 +14,7 @@ var jsyaml = function() {
             var match = line.match(/^\s*/);
             return match ? match[0].length / 2 : 0;  // 假设每个缩进是2个空格
         }
+        
 
         // 用于存储已处理的属性，避免重复
         var processedProps = new Set();
