@@ -196,7 +196,7 @@ document.addEventListener('DOMContentLoaded', function() {
         initializeSqlEventListeners();
     });
 
-    // 普通JSON格式化功能
+    // JSON格式化相关的事件监听器
     document.getElementById('formatJson').addEventListener('click', function() {
         const input = document.getElementById('jsonInput');
         try {
@@ -213,7 +213,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-    // 带注释的JSON格式化功能
     document.getElementById('formatJsonWithComments').addEventListener('click', function() {
         const input = document.getElementById('jsonInput');
         try {
@@ -297,6 +296,26 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('无效的JSON格式！' + e.message);
         }
     });
+
+    // 添加JSON复制按钮的事件监听器
+    const copyJsonBtn = document.getElementById('copyJson');
+    if (copyJsonBtn) {
+        copyJsonBtn.addEventListener('click', function() {
+            const jsonInput = document.getElementById('jsonInput');
+            const jsonText = jsonInput.value.trim();
+            
+            if (jsonText) {
+                // 选中文本
+                jsonInput.select();
+                // 复制到剪贴板
+                document.execCommand('copy');
+                // 提示用户
+                alert('JSON已复制到剪贴板！');
+            } else {
+                alert('没有可复制的JSON内容！');
+            }
+        });
+    }
 
     // YAML转Properties功能
     document.getElementById('convertToProperties').addEventListener('click', function() {
